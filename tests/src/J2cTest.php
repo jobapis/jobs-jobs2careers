@@ -18,42 +18,13 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $this->client = new J2c($this->params);
     }
 
-    public function testWholeThing()
-    {
-        $results = $this->client
-            ->setKeyword('engineer')
-            ->setCount(1)
-            ->getJobs();
-        print_r($results); exit;
-    }
-
-    /*
-    private function getResultItems($count = 1)
-    {
-        $results = [];
-
-        for ($i = 0; $i < $count; $i++) {
-            array_push($results, [
-                'jobtitle' => uniqid(),
-                'company' => uniqid(),
-                'formattedLocation' => uniqid(),
-                'source' => uniqid(),
-                'date' => uniqid(),
-                'snippet' => uniqid(),
-                'url' => uniqid(),
-                'jobkey' => uniqid(),
-            ]);
-        }
-
-        return $results;
-    }
-
     public function testItWillUseJsonFormat()
     {
         $format = $this->client->getFormat();
 
         $this->assertEquals('json', $format);
     }
+
     public function testItWillUseGetHttpVerb()
     {
         $verb = $this->client->getVerb();
@@ -65,7 +36,7 @@ class J2cTest extends \PHPUnit_Framework_TestCase
     {
         $path = $this->client->getListingsPath();
 
-        $this->assertEquals('results', $path);
+        $this->assertEquals('jobs', $path);
     }
 
     public function testItWillProvideEmptyParameters()
@@ -78,20 +49,21 @@ class J2cTest extends \PHPUnit_Framework_TestCase
 
     public function testUrlIncludesHighlightWhenProvided()
     {
-        $param = 'highlight='.$this->params['highlight'];
+        $highlight = uniqid();
+        $param = 'hl='.$highlight;
 
-        $url = $this->client->getUrl();
+        $url = $this->client->setHighlight($highlight)->getUrl();
 
         $this->assertContains($param, $url);
     }
 
-    public function testUrlNotIncludesHighlightWhenNotProvided()
+    public function testUrlIncludesEmptyHighlightWhenNotProvided()
     {
-        $param = 'highlight=';
+        $param = 'hl=';
 
-        $url = $this->client->setHighlight(null)->getUrl();
+        $url = $this->client->getUrl();
 
-        $this->assertNotContains($param, $url);
+        $this->assertContains($param, $url);
     }
 
     public function testUrlIncludesKeywordWhenProvided()
@@ -117,7 +89,7 @@ class J2cTest extends \PHPUnit_Framework_TestCase
     {
         $city = uniqid();
         $state = uniqid();
-        $param = 'l='.urlencode($city.', '.$state);
+        $param = '&l='.urlencode($city.', '.$state);
 
         $url = $this->client->setCity($city)->setState($state)->getUrl();
 
@@ -127,7 +99,7 @@ class J2cTest extends \PHPUnit_Framework_TestCase
     public function testUrlIncludesLocationWhenCityProvided()
     {
         $city = uniqid();
-        $param = 'l='.urlencode($city);
+        $param = '&l='.urlencode($city);
 
         $url = $this->client->setCity($city)->getUrl();
 
@@ -137,7 +109,7 @@ class J2cTest extends \PHPUnit_Framework_TestCase
     public function testUrlIncludesLocationWhenStateProvided()
     {
         $state = uniqid();
-        $param = 'l='.urlencode($state);
+        $param = '&l='.urlencode($state);
 
         $url = $this->client->setState($state)->getUrl();
 
@@ -146,7 +118,7 @@ class J2cTest extends \PHPUnit_Framework_TestCase
 
     public function testUrlNotIncludesLocationWhenNotProvided()
     {
-        $param = 'l=';
+        $param = '&l=';
 
         $url = $this->client->getUrl();
 
@@ -172,22 +144,22 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains($param, $url);
     }
 
-    public function testUrlIncludesPublisherWhenProvided()
+    public function testUrlIncludesIpAddressWhenProvided()
     {
-        $param = 'publisher='.$this->params['publisherId'];
+        $ipAddress = uniqid();
+        $param = 'ip='.$ipAddress;
 
-        $url = $this->client->getUrl();
+        $url = $this->client->setIpAddress($ipAddress)->getUrl();
 
         $this->assertContains($param, $url);
     }
 
-    public function testUrlNotIncludesPublisherWhenNotProvided()
+    public function testUrlIncludesIpAddressWhenNotProvided()
     {
-        $param = 'publisher=';
+        $param = 'ip=';
+        $url = $this->client->getUrl();
 
-        $url = $this->client->setPublisherId(null)->getUrl();
-
-        $this->assertNotContains($param, $url);
+        $this->assertContains($param, $url);
     }
 
     public function testUrlIncludesStartWhenProvided()
@@ -195,36 +167,18 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $page = uniqid();
         $param = 'start='.$page;
 
-        $url = $this->client->setPage($page)->getUrl();
+        $url = $this->client->setStart($page)->getUrl();
 
         $this->assertContains($param, $url);
     }
 
     public function testUrlNotIncludesStartWhenNotProvided()
     {
-        $param = 'start=';
-
-        $url = $this->client->setPage(null)->getUrl();
-
-        $this->assertNotContains($param, $url);
-    }
-
-    public function testUrlIncludesVersionWhenProvided()
-    {
-        $param = 'v='.$this->params['version'];
+        $param = 'start=0';
 
         $url = $this->client->getUrl();
 
         $this->assertContains($param, $url);
-    }
-
-    public function testUrlNotIncludesVersionWhenNotProvided()
-    {
-        $param = 'v=';
-
-        $url = $this->client->setVersion(null)->getUrl();
-
-        $this->assertNotContains($param, $url);
     }
 
     public function testItCanCreateJobFromPayload()
@@ -232,14 +186,40 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $payload = $this->createJobArray();
         $results = $this->client->createJobObject($payload);
 
-        $this->assertEquals($payload['jobtitle'], $results->title);
-        $this->assertEquals($payload['snippet'], $results->description);
+        $this->assertEquals($payload['title'], $results->title);
+        $this->assertEquals($payload['description'], $results->description);
         $this->assertEquals($payload['company'], $results->company);
-        $this->assertEquals($payload['url'], $results->url);
-        $this->assertEquals($payload['jobkey'], $results->sourceId);
-        $this->assertEquals($payload['formattedLocation'], $results->location);
     }
 
+    public function testItCreatesMultipleJobsWhenMultipleLocationsReturned()
+    {
+        $loc_count = rand(2,5);
+        $jobArray = $this->createJobArray($loc_count);
+
+        $array = $this->client->createJobArray($jobArray);
+
+        foreach ($array as $key => $job) {
+            $this->assertEquals($jobArray['title'], $array[0]['title']);
+            $this->assertEquals($jobArray['city'][$key], $array[$key]['city']);
+        }
+        $this->assertEquals($loc_count, count($array));
+    }
+
+    public function testItCreatesOneJobWhenOneLocationsReturned()
+    {
+        $loc_count = 1;
+        $jobArray = $this->createJobArray($loc_count);
+
+        $array = $this->client->createJobArray($jobArray);
+
+        foreach ($array as $key => $job) {
+            $this->assertEquals($jobArray['title'], $array[0]['title']);
+            $this->assertEquals($jobArray['city'][$key], $array[$key]['city']);
+        }
+        $this->assertEquals($loc_count, count($array));
+    }
+
+/*
     public function testItCanConnect()
     {
         $provider = $this->getProviderAttributes();
@@ -272,17 +252,6 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $this->assertCount($provider['jobs_count'], $results);
     }
 
-    private function createJobArray() {
-        return [
-            'jobtitle' => uniqid(),
-            'company' => uniqid(),
-            'formattedLocation' => uniqid(),
-            'snippet' => uniqid(),
-            'url' => uniqid(),
-            'jobkey' => uniqid(),
-        ];
-    }
-
     private function getProviderAttributes($attributes = [])
     {
         $defaults = [
@@ -297,4 +266,28 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         return array_replace($defaults, $attributes);
     }
     */
+
+    private function createJobArray($loc_count = 3) {
+        return [
+            'title' => uniqid(),
+            'date' => '2015-07-02T00:08:59Z',
+            'onclick' => uniqid(),
+            'company' => uniqid(),
+            'city' => $this->createLocationsArray($loc_count),
+            'description' => uniqid(),
+            'price' => uniqid(),
+            'id' => uniqid(),
+            'industry0' => uniqid(),
+        ];
+    }
+
+    private function createLocationsArray($loc_count = 3) {
+        $locations = [];
+        $i = 0;
+        while ($i < $loc_count) {
+            $locations[] = uniqid();
+            $i++;
+        }
+        return $locations;
+    }
 }

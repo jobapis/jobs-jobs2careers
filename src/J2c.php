@@ -78,7 +78,6 @@ class J2c extends AbstractProvider
         ];
 
         $payload = static::parseAttributeDefaults($payload, $defaults);
-        //print_r($payload); exit;
 
         $job = new Job([
             'title' => $payload['title'],
