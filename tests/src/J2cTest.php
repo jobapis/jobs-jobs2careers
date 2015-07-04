@@ -12,13 +12,22 @@ class J2cTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->params = [
-            'publisherId' => '12345667',
-            'version' => 2,
-            'highlight' => 0,
+            'partnerId' => '784',
+            'partnerPass' => 'qGFjFBrlAEIOAsdx',
         ];
         $this->client = new J2c($this->params);
     }
 
+    public function testWholeThing()
+    {
+        $results = $this->client
+            ->setKeyword('engineer')
+            ->setCount(1)
+            ->getJobs();
+        print_r($results); exit;
+    }
+
+    /*
     private function getResultItems($count = 1)
     {
         $results = [];
@@ -45,7 +54,6 @@ class J2cTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('json', $format);
     }
-
     public function testItWillUseGetHttpVerb()
     {
         $verb = $this->client->getVerb();
@@ -288,4 +296,5 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         ];
         return array_replace($defaults, $attributes);
     }
+    */
 }

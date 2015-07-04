@@ -1,6 +1,7 @@
 <?php namespace JobBrander\Jobs\Client\Providers;
 
 use JobBrander\Jobs\Client\Job;
+use JobBrander\Jobs\Client\Collection;
 
 class J2c extends AbstractProvider
 {
@@ -16,14 +17,14 @@ class J2c extends AbstractProvider
      *
      * @var string
      */
-    protected $partnerPassword;
+    protected $partnerPass;
 
     /**
-     * Version
+     * Client IP Address
      *
      * @var string
      */
-    protected $version;
+    protected $ipAddress;
 
     /**
      * Highlight
@@ -64,21 +65,72 @@ class J2c extends AbstractProvider
      */
     public function createJobObject($payload)
     {
-        $defaults = ['jobtitle', 'company', 'formattedLocation', 'source',
-            'date', 'snippet', 'url', 'jobkey'];
+        $defaults = [
+            'title',
+            'date',
+            'onclick',
+            'company',
+            'city', // Array
+            'description',
+            'price',
+            'id',
+            'industry0',
+        ];
 
         $payload = static::parseAttributeDefaults($payload, $defaults);
+        //print_r($payload); exit;
 
         $job = new Job([
-            'title' => $payload['jobtitle'],
-            'description' => $payload['snippet'],
-            'url' => $payload['url'],
-            'sourceId' => $payload['jobkey'],
-            'company' => $payload['company'],
-            'location' => $payload['formattedLocation'],
+            'title' => $payload['title'],
+            'description' => $payload['description'],
+            'javascriptFunction' => $payload['onclick'],
+            'javascriptAction' => 'onclick',
+            'sourceId' => $payload['id'],
+            'industry' => $payload['industry0'],
         ]);
 
+        $job->setDatePostedAsString($payload['date']);
+        $job->setCompany($payload['company']);
+        $job->setLocation($payload['city']);
+
         return $job;
+    }
+
+    /**
+     * Create and get collection of jobs from given listings
+     *
+     * @param  array $listings
+     *
+     * @return Collection
+     */
+    protected function getJobsCollectionFromListings(array $listings = array())
+    {
+        $collection = new Collection;
+        array_map(function ($item) use ($collection) {
+            $jobs = $this->createJobArray($item);
+            foreach ($jobs as $item) {
+                $job = $this->createJobObject($item);
+                $job->setQuery($this->keyword)
+                    ->setSource($this->getSource());
+                $collection->add($job);
+            }
+        }, $listings);
+        return $collection;
+    }
+
+    public function createJobArray($item)
+    {
+        $jobs = [];
+        if (isset($item['city']) && count($item['city']) > 1) {
+            foreach ($item['city'] as $location) {
+                $item['city'] = $location;
+                $jobs[] = $item;
+            }
+        } else {
+            $item['city'] = $item['city'][0];
+            $jobs[] = $item;
+        }
+        return $jobs;
     }
 
     /**
@@ -92,13 +144,55 @@ class J2c extends AbstractProvider
     }
 
     /**
+     * Get IP Address
+     *
+     * @return  string
+     */
+    public function getIpAddress()
+    {
+        if (isset($this->ipAddress)) {
+            return $this->ipAddress;
+        } else {
+            return getHostByName(getHostName());
+        }
+    }
+
+    /**
+     * Get Start number
+     *
+     * @return  string
+     */
+    public function getStart()
+    {
+        if (isset($this->start)) {
+            return $this->start;
+        } else {
+            return '0';
+        }
+    }
+
+    /**
+     * Get Highlight wrapper
+     *
+     * @return  string
+     */
+    public function getHighlight()
+    {
+        if (isset($this->highlight)) {
+            return $this->highlight;
+        } else {
+            return '';
+        }
+    }
+
+    /**
      * Get listings path
      *
      * @return  string
      */
     public function getListingsPath()
     {
-        return 'results';
+        return 'jobs';
     }
 
     /**
@@ -135,14 +229,15 @@ class J2c extends AbstractProvider
     public function getQueryString()
     {
         $query_params = [
-            'publisher' => 'getPublisherId',
-            'v' => 'getVersion',
-            'highlight' => 'getHighlight',
+            'id' => 'getPartnerId',
+            'pass' => 'getPartnerPass',
+            'ip' => 'getIpAddress',
             'format' => 'getFormat',
             'q' => 'getKeyword',
             'l' => 'getLocation',
-            'start' => 'getPage',
+            'start' => 'getStart',
             'limit' => 'getCount',
+            'hl' => 'getHighlight',
         ];
 
         array_walk($query_params, [$this, 'addToQueryStringIfValid']);
@@ -158,8 +253,7 @@ class J2c extends AbstractProvider
     public function getUrl()
     {
         $query_string = $this->getQueryString();
-
-        return 'http://api.indeed.com/ads/apisearch?'.$query_string;
+        return 'http://api.jobs2careers.com/api/search.php?'.$query_string;
     }
 
     /**
