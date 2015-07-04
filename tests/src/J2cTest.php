@@ -219,13 +219,12 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($loc_count, count($array));
     }
 
-/*
     public function testItCanConnect()
     {
         $provider = $this->getProviderAttributes();
 
         for ($i = 0; $i < $provider['jobs_count']; $i++) {
-            $payload['results'][] = $this->createJobArray();
+            $payload['jobs'][] = $this->createJobArray();
         }
 
         $responseBody = json_encode($payload);
@@ -265,9 +264,8 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         ];
         return array_replace($defaults, $attributes);
     }
-    */
 
-    private function createJobArray($loc_count = 3) {
+    private function createJobArray($loc_count = 1) {
         return [
             'title' => uniqid(),
             'date' => '2015-07-02T00:08:59Z',
