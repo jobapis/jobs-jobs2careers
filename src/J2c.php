@@ -2,14 +2,21 @@
 
 use JobBrander\Jobs\Client\Job;
 
-class Indeed extends AbstractProvider
+class J2c extends AbstractProvider
 {
     /**
-     * Publisher Id
+     * Partner Id
      *
      * @var string
      */
-    protected $publisherId;
+    protected $partnerId;
+
+    /**
+     * Partner Password
+     *
+     * @var string
+     */
+    protected $partnerPassword;
 
     /**
      * Version

@@ -1,9 +1,9 @@
 <?php namespace JobBrander\Jobs\Client\Providers\Test;
 
-use JobBrander\Jobs\Client\Providers\Indeed;
+use JobBrander\Jobs\Client\Providers\J2c;
 use Mockery as m;
 
-class IndeedTest extends \PHPUnit_Framework_TestCase
+class J2cTest extends \PHPUnit_Framework_TestCase
 {
     private $clientClass = 'JobBrander\Jobs\Client\Providers\AbstractProvider';
     private $collectionClass = 'JobBrander\Jobs\Client\Collection';
@@ -16,7 +16,7 @@ class IndeedTest extends \PHPUnit_Framework_TestCase
             'version' => 2,
             'highlight' => 0,
         ];
-        $this->client = new Indeed($this->params);
+        $this->client = new J2c($this->params);
     }
 
     private function getResultItems($count = 1)
