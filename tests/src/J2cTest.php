@@ -12,8 +12,8 @@ class J2cTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->params = [
-            'partnerId' => '784',
-            'partnerPass' => 'qGFjFBrlAEIOAsdx',
+            'partnerId' => uniqid(),
+            'partnerPass' => uniqid(),
         ];
         $this->client = new J2c($this->params);
     }
