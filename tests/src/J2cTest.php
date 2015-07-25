@@ -184,6 +184,7 @@ class J2cTest extends \PHPUnit_Framework_TestCase
     public function testItCanCreateJobFromPayload()
     {
         $payload = $this->createJobArray();
+        $payload['city'] = uniqid().', '.uniqid();
         $results = $this->client->createJobObject($payload);
 
         $this->assertEquals($payload['title'], $results->title);

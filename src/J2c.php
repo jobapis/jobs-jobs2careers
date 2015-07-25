@@ -70,7 +70,7 @@ class J2c extends AbstractProvider
             'date',
             'onclick',
             'company',
-            'city', // Array
+            'city',
             'description',
             'price',
             'id',
@@ -81,6 +81,7 @@ class J2c extends AbstractProvider
 
         $job = new Job([
             'title' => $payload['title'],
+            'name' => $payload['title'],
             'description' => $payload['description'],
             'javascriptFunction' => $payload['onclick'],
             'javascriptAction' => 'onclick',
@@ -88,9 +89,17 @@ class J2c extends AbstractProvider
             'industry' => $payload['industry0'],
         ]);
 
-        $job->setDatePostedAsString($payload['date']);
-        $job->setCompany($payload['company']);
-        $job->setLocation($payload['city']);
+        $location = $this->parseLocation($payload['city']);
+
+        $job->setDatePostedAsString($payload['date'])
+            ->setCompany($payload['company']);
+
+        if (isset($location[0])) {
+            $job->setCity($location[0]);
+        }
+        if (isset($location[1])) {
+            $job->setState($location[1]);
+        }
 
         return $job;
     }
@@ -263,5 +272,15 @@ class J2c extends AbstractProvider
     public function getVerb()
     {
         return 'GET';
+    }
+
+    /**
+     * Parse city and state from string given by API
+     *
+     * @return array
+     */
+    public function parseLocation($location)
+    {
+        return explode(', ', $location);
     }
 }
