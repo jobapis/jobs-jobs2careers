@@ -89,7 +89,7 @@ class J2c extends AbstractProvider
             'industry' => $payload['industry0'],
         ]);
 
-        $location = $this->parseLocation($payload['city']);
+        $location = static::parseLocation($payload['city']);
 
         $job->setDatePostedAsString($payload['date'])
             ->setCompany($payload['company']);
@@ -220,16 +220,6 @@ class J2c extends AbstractProvider
     }
 
     /**
-     * Get parameters
-     *
-     * @return  array
-     */
-    public function getParameters()
-    {
-        return [];
-    }
-
-    /**
      * Get query string for client based on properties
      *
      * @return string
@@ -272,15 +262,5 @@ class J2c extends AbstractProvider
     public function getVerb()
     {
         return 'GET';
-    }
-
-    /**
-     * Parse city and state from string given by API
-     *
-     * @return array
-     */
-    public function parseLocation($location)
-    {
-        return explode(', ', $location);
     }
 }
