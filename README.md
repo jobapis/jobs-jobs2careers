@@ -7,7 +7,8 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/JobBrander/jobs-jobs2careers.svg?style=flat-square)](https://scrutinizer-ci.com/g/JobBrander/jobs-jobs2careers)
 [![Total Downloads](https://img.shields.io/packagist/dt/jobbrander/jobs-jobs2careers.svg?style=flat-square)](https://packagist.org/packages/jobbrander/jobs-jobs2careers)
 
-This package provides Jobs2Careers API support for the JobBrander's [Jobs Client](https://github.com/JobBrander/jobs-common).
+This package provides [Jobs2Careers API](http://api.jobs2careers.com/api/spec.pdf)
+support for the JobBrander's [Jobs Client](https://github.com/JobBrander/jobs-common).
 
 ## Installation
 
@@ -28,10 +29,10 @@ $client = new JobBrander\Jobs\Client\Provider\J2c([
 ]);
 
 // Search for 200 job listings for 'project manager' in Chicago, IL
-$jobs = $client->setKeyword('project manager')
-    ->setCity('Chicago')
+$jobs = $client->setKeyword('project manager') // Query string (keyword) to search for
+    ->setCity('Chicago')    // Combined with state to create 'location' parameter in API
     ->setState('IL')
-    ->setCount(200)
+    ->setCount(200)         // Max number of results (not to exceed 200)
     ->getJobs();
 ```
 
