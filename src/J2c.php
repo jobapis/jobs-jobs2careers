@@ -6,54 +6,110 @@ use JobBrander\Jobs\Client\Collection;
 class J2c extends AbstractProvider
 {
     /**
-     * Partner Id
-     *
-     * @var string
-     */
-    protected $partnerId;
-
-    /**
-     * Partner Password
-     *
-     * @var string
-     */
-    protected $partnerPass;
-
-    /**
-     * Client IP Address
-     *
-     * @var string
-     */
-    protected $ipAddress;
-
-    /**
-     * Highlight
-     *
-     * @var string
-     */
-    protected $highlight;
-
-    /**
-     * Query params
+     * Map of setter methods to query parameters
      *
      * @var array
      */
-    protected $queryParams = [];
+    protected $queryMap = [
+        'setId' => 'id',
+        'setPass' => 'pass',
+        'setIp' => 'ip',
+        'setQ' => 'q',
+        'setL' => 'l',
+        'setStart' => 'start',
+        'setSort' => 'sort',
+        'setIndustry' => 'industry',
+        'setIndustryEx' => 'industryEx',
+        'setFormat' => 'format',
+        'setM' => 'm',
+        'setLimit' => 'limit',
+        'setLink' => 'link',
+        'setFull_Desc' => 'full_desc',
+        'setJobid' => 'jobid',
+        'setJobtype' => 'jobtype',
+        'setCount' => 'limit',
+        'setKeyword' => 'q',
+        'setPartnerId' => 'id',
+        'setPartnerPass' => 'pass',
+        'setCity' => 'city',
+        'setState' => 'state',
+    ];
 
     /**
-     * Add query params, if valid
+     * Current api query parameters
      *
-     * @param string $value
-     * @param string $key
-     *
-     * @return  void
+     * @var array
      */
-    private function addToQueryStringIfValid($value, $key)
+    protected $queryParams = [
+        'id' => null,
+        'pass' => null,
+        'ip' => null,
+        'q' => null,
+        'l' => null,
+        'start' => '0',
+        'sort' => null,
+        'industry' => null,
+        'industryEx' => null,
+        'format' => 'json',
+        'm' => null,
+        'limit' => null,
+        'link' => null,
+        'full_desc' => null,
+        'jobid' => null,
+        'jobtype' => null,
+    ];
+
+    /**
+     * Create new J2c jobs client.
+     *
+     * @param array $parameters
+     */
+    public function __construct($parameters = [])
     {
-        $computed_value = $this->$value();
-        if (!is_null($computed_value)) {
-            $this->queryParams[$key] = $computed_value;
+        parent::__construct($parameters);
+        array_walk($parameters, [$this, 'updateQuery']);
+        // Set default parameters
+        if (!isset($this->ip)) {
+            $this->updateQuery($this->getIp(), 'ip');
         }
+    }
+
+    /**
+     * Magic method to handle get and set methods for properties
+     *
+     * @param  string $method
+     * @param  array  $parameters
+     *
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if (isset($this->queryMap[$method], $parameters[0])) {
+            $this->updateQuery($parameters[0], $this->queryMap[$method]);
+        }
+        return parent::__call($method, $parameters);
+    }
+
+    /**
+     * Creates an array of jobs out of jobs with multiple locations
+     *
+     * @param array $item
+     *
+     * @return array $jobs
+     */
+    public function createJobArray($item)
+    {
+        $jobs = [];
+        if (isset($item['city']) && count($item['city']) > 1) {
+            foreach ($item['city'] as $location) {
+                $item['city'] = $location;
+                $jobs[] = $item;
+            }
+        } else {
+            $item['city'] = $item['city'][0];
+            $jobs[] = $item;
+        }
+        return $jobs;
     }
 
     /**
@@ -105,43 +161,6 @@ class J2c extends AbstractProvider
     }
 
     /**
-     * Create and get collection of jobs from given listings
-     *
-     * @param  array $listings
-     *
-     * @return Collection
-     */
-    protected function getJobsCollectionFromListings(array $listings = array())
-    {
-        $collection = new Collection;
-        array_map(function ($item) use ($collection) {
-            $jobs = $this->createJobArray($item);
-            foreach ($jobs as $item) {
-                $job = $this->createJobObject($item);
-                $job->setQuery($this->keyword)
-                    ->setSource($this->getSource());
-                $collection->add($job);
-            }
-        }, $listings);
-        return $collection;
-    }
-
-    public function createJobArray($item)
-    {
-        $jobs = [];
-        if (isset($item['city']) && count($item['city']) > 1) {
-            foreach ($item['city'] as $location) {
-                $item['city'] = $location;
-                $jobs[] = $item;
-            }
-        } else {
-            $item['city'] = $item['city'][0];
-            $jobs[] = $item;
-        }
-        return $jobs;
-    }
-
-    /**
      * Get data format
      *
      * @return string
@@ -156,40 +175,12 @@ class J2c extends AbstractProvider
      *
      * @return  string
      */
-    public function getIpAddress()
+    public function getIp()
     {
-        if (isset($this->ipAddress)) {
-            return $this->ipAddress;
+        if (isset($this->queryParams['ip'])) {
+            return $this->queryParams['ip'];
         } else {
             return getHostByName(getHostName());
-        }
-    }
-
-    /**
-     * Get Start number
-     *
-     * @return  string
-     */
-    public function getStart()
-    {
-        if (isset($this->start)) {
-            return $this->start;
-        } else {
-            return '0';
-        }
-    }
-
-    /**
-     * Get Highlight wrapper
-     *
-     * @return  string
-     */
-    public function getHighlight()
-    {
-        if (isset($this->highlight)) {
-            return $this->highlight;
-        } else {
-            return '';
         }
     }
 
@@ -204,42 +195,12 @@ class J2c extends AbstractProvider
     }
 
     /**
-     * Get combined location
-     *
-     * @return string
-     */
-    public function getLocation()
-    {
-        $location = ($this->city ? $this->city.', ' : null).($this->state ?: null);
-
-        if ($location) {
-            return $location;
-        }
-
-        return null;
-    }
-
-    /**
      * Get query string for client based on properties
      *
      * @return string
      */
     public function getQueryString()
     {
-        $query_params = [
-            'id' => 'getPartnerId',
-            'pass' => 'getPartnerPass',
-            'ip' => 'getIpAddress',
-            'format' => 'getFormat',
-            'q' => 'getKeyword',
-            'l' => 'getLocation',
-            'start' => 'getStart',
-            'limit' => 'getCount',
-            'hl' => 'getHighlight',
-        ];
-
-        array_walk($query_params, [$this, 'addToQueryStringIfValid']);
-
         return http_build_query($this->queryParams);
     }
 
@@ -262,5 +223,43 @@ class J2c extends AbstractProvider
     public function getVerb()
     {
         return 'GET';
+    }
+
+    /**
+     * Create and get collection of jobs from given listings
+     *
+     * @param  array $listings
+     *
+     * @return Collection
+     */
+    protected function getJobsCollectionFromListings(array $listings = array())
+    {
+        $collection = new Collection;
+        array_map(function ($item) use ($collection) {
+            $jobs = $this->createJobArray($item);
+            foreach ($jobs as $item) {
+                $job = $this->createJobObject($item);
+                $job->setQuery($this->keyword)
+                    ->setSource($this->getSource());
+                $collection->add($job);
+            }
+        }, $listings);
+        return $collection;
+    }
+
+    /**
+     * Attempts to update current query parameters.
+     *
+     * @param  string  $value
+     * @param  string  $key
+     *
+     * @return Careerbuilder
+     */
+    protected function updateQuery($value, $key)
+    {
+        if (array_key_exists($key, $this->queryParams)) {
+            $this->queryParams[$key] = $value;
+        }
+        return $this;
     }
 }

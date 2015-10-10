@@ -1,6 +1,25 @@
 # Changelog
 All Notable changes to `jobs-jobs2careers` will be documented in this file
 
+## 1.0.0 - 2015-10-10
+
+### Added
+- Support for all setter methods outlined in the [Jobs2Careers API](http://api.jobs2careers.com/api/spec.pdf)
+- Readme documentation for all supported methods
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Sorting methods alphabetically
+- Travis-ci support for PHP 7.0 and HHVM
+
+### Removed
+- setCity and setState methods not supported by official API
+
+### Security
+- Nothing
+
 ## 0.1.2 - 2015-08-14
 
 ### Added

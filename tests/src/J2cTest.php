@@ -47,25 +47,6 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($parameters));
     }
 
-    public function testUrlIncludesHighlightWhenProvided()
-    {
-        $highlight = uniqid();
-        $param = 'hl='.$highlight;
-
-        $url = $this->client->setHighlight($highlight)->getUrl();
-
-        $this->assertContains($param, $url);
-    }
-
-    public function testUrlIncludesEmptyHighlightWhenNotProvided()
-    {
-        $param = 'hl=';
-
-        $url = $this->client->getUrl();
-
-        $this->assertContains($param, $url);
-    }
-
     public function testUrlIncludesKeywordWhenProvided()
     {
         $keyword = uniqid().' '.uniqid();
@@ -85,33 +66,13 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains($param, $url);
     }
 
-    public function testUrlIncludesLocationWhenCityAndStateProvided()
+    public function testUrlIncludesLocationWhenLocationProvided()
     {
         $city = uniqid();
         $state = uniqid();
         $param = '&l='.urlencode($city.', '.$state);
 
-        $url = $this->client->setCity($city)->setState($state)->getUrl();
-
-        $this->assertContains($param, $url);
-    }
-
-    public function testUrlIncludesLocationWhenCityProvided()
-    {
-        $city = uniqid();
-        $param = '&l='.urlencode($city);
-
-        $url = $this->client->setCity($city)->getUrl();
-
-        $this->assertContains($param, $url);
-    }
-
-    public function testUrlIncludesLocationWhenStateProvided()
-    {
-        $state = uniqid();
-        $param = '&l='.urlencode($state);
-
-        $url = $this->client->setState($state)->getUrl();
+        $url = $this->client->setL($city.', '.$state)->getUrl();
 
         $this->assertContains($param, $url);
     }
@@ -149,7 +110,7 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $ipAddress = uniqid();
         $param = 'ip='.$ipAddress;
 
-        $url = $this->client->setIpAddress($ipAddress)->getUrl();
+        $url = $this->client->setIp($ipAddress)->getUrl();
 
         $this->assertContains($param, $url);
     }
