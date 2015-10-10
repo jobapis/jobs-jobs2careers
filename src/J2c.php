@@ -177,8 +177,8 @@ class J2c extends AbstractProvider
      */
     public function getIp()
     {
-        if (isset($this->ip)) {
-            return $this->ip;
+        if (isset($this->queryParams['ip'])) {
+            return $this->queryParams['ip'];
         } else {
             return getHostByName(getHostName());
         }
