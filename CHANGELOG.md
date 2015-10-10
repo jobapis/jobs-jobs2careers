@@ -4,7 +4,7 @@ All Notable changes to `jobs-jobs2careers` will be documented in this file
 ## 1.0.0 - 2015-10-10
 
 ### Added
-- Support for all setter methods outlined in the [Careerbuilder API](http://api.careerbuilder.com/Search/jobsearch/jobsearchinfo.aspx)
+- Support for all setter methods outlined in the [Jobs2Careers API](http://api.jobs2careers.com/api/spec.pdf)
 - Readme documentation for all supported methods
 
 ### Deprecated

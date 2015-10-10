@@ -30,7 +30,7 @@ $client = new JobBrander\Jobs\Client\Provider\J2c([
 
 // Search for 200 job listings for 'project manager' in Chicago, IL
 $jobs = $client
-    // API Parameters
+    // API Parameters from [Official Jobs2Careers documentation](http://api.jobs2careers.com/api/spec.pdf)
     ->setId()    // (Required) Your unique Publisher ID (as shown in the Feed Manager)
     ->setPass()    // (Required) Your unique Publisher Password (as shown in your Feed Manager)
     ->setIp()    // (Required) Preferably the END USER's IP (unless email)
