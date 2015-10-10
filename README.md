@@ -25,14 +25,35 @@ Usage is the same as Job Branders's Jobs Client, using `\JobBrander\Jobs\Client\
 ```php
 $client = new JobBrander\Jobs\Client\Provider\J2c([
     'id' => 'Jobs2Careers Partner ID',
-    'password' => 'Jobs2Careers Password'
+    'pass' => 'Jobs2Careers Password'
 ]);
 
 // Search for 200 job listings for 'project manager' in Chicago, IL
-$jobs = $client->setKeyword('project manager') // Query string (keyword) to search for
+$jobs = $client
+    // API Parameters
+    ->setId()    // (Required) Your unique Publisher ID (as shown in the Feed Manager)
+    ->setPass()    // (Required) Your unique Publisher Password (as shown in your Feed Manager)
+    ->setIp()    // (Required) Preferably the END USER's IP (unless email)
+    ->setQ()    // (Either q or l or both should be present) URL encoded query string (keyword)
+    ->setL()    // (Either q or l or both should be present) location (city, state, zip, etc)
+    ->setStart()    // (Optional) Start offset
+    ->setSort()    // (Optional) Either "d" by date or "r" by relevance, defaults to "r"
+    ->setIndustry()    // (Optional) An industry string or ID (see API docs) to include
+    ->setIndustryex()    // (Optional) An industry string or ID (see API docs) to exclude
+    ->setFormat()    // (Optional) API output format (should not be used)
+    ->setM()    // (Optional) Mobile optimized jobs only if "1"
+    ->setLimit()    // (Optional) Max number of results (not to exceed 200). Defaults to 10
+    ->setLink()    // (Optional) Bypass JS to expose the direct link to the listing
+    ->setFull_Desc()    // (Optional) Shows full job description if "1"
+    ->setJobid()    // (Optional) Return only a specific active job ID
+    ->setJobtype()    // (Optional) Return only full time (1), part time (2), or gigs (4). Can have 1 or more values
+    // Extra parameters, not supported by official API
+    ->setCount(200)         // Alias for setLimit()
+    ->setKeyword('project manager') // Alias for setQ()
+    ->setPartnerId()        // Alias for setId()
+    ->setPartnerPass()      // Alias for setPass()
     ->setCity('Chicago')    // Combined with state to create 'location' parameter in API
     ->setState('IL')
-    ->setCount(200)         // Max number of results (not to exceed 200)
     ->getJobs();
 ```
 
