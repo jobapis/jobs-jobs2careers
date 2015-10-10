@@ -46,7 +46,7 @@ class J2c extends AbstractProvider
         'ip' => null,
         'q' => null,
         'l' => null,
-        'start' => null,
+        'start' => '0',
         'sort' => null,
         'industry' => null,
         'industryEx' => null,
