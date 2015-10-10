@@ -52,8 +52,6 @@ $jobs = $client
     ->setKeyword('project manager') // Alias for setQ()
     ->setPartnerId()        // Alias for setId()
     ->setPartnerPass()      // Alias for setPass()
-    ->setCity('Chicago')    // Combined with state to create 'location' parameter in API
-    ->setState('IL')
     ->getJobs();
 ```
 

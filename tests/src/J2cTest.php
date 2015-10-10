@@ -47,25 +47,6 @@ class J2cTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue(is_array($parameters));
     }
 
-    public function testUrlIncludesHighlightWhenProvided()
-    {
-        $highlight = uniqid();
-        $param = 'hl='.$highlight;
-
-        $url = $this->client->setHighlight($highlight)->getUrl();
-
-        $this->assertContains($param, $url);
-    }
-
-    public function testUrlIncludesEmptyHighlightWhenNotProvided()
-    {
-        $param = 'hl=';
-
-        $url = $this->client->getUrl();
-
-        $this->assertContains($param, $url);
-    }
-
     public function testUrlIncludesKeywordWhenProvided()
     {
         $keyword = uniqid().' '.uniqid();

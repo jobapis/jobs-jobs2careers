@@ -1,7 +1,7 @@
 # Changelog
 All Notable changes to `jobs-jobs2careers` will be documented in this file
 
-## 0.2.0 - 2015-10-10
+## 1.0.0 - 2015-10-10
 
 ### Added
 - Support for all setter methods outlined in the [Careerbuilder API](http://api.careerbuilder.com/Search/jobsearch/jobsearchinfo.aspx)
@@ -15,7 +15,7 @@ All Notable changes to `jobs-jobs2careers` will be documented in this file
 - Travis-ci support for PHP 7.0 and HHVM
 
 ### Removed
-- Nothing
+- setCity and setState methods not supported by official API
 
 ### Security
 - Nothing
