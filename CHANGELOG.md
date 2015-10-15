@@ -1,6 +1,23 @@
 # Changelog
 All Notable changes to `jobs-jobs2careers` will be documented in this file
 
+## 1.1.0 - 2015-10-15
+
+### Added
+- Added support for setLocation() method
+
+### Deprecated
+- Nothing
+
+### Fixed
+- Nothing
+
+### Removed
+- Nothing
+
+### Security
+- Nothing
+
 ## 1.0.0 - 2015-10-10
 
 ### Added

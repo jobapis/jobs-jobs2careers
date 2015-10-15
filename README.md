@@ -50,6 +50,7 @@ $jobs = $client
     // Extra parameters, not supported by official API
     ->setCount(200)         // Alias for setLimit()
     ->setKeyword('project manager') // Alias for setQ()
+    ->setLocation('Chicago, IL') // Alias for setL()
     ->setPartnerId()        // Alias for setId()
     ->setPartnerPass()      // Alias for setPass()
     ->getJobs();
