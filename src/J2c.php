@@ -31,8 +31,7 @@ class J2c extends AbstractProvider
         'setKeyword' => 'q',
         'setPartnerId' => 'id',
         'setPartnerPass' => 'pass',
-        'setCity' => 'city',
-        'setState' => 'state',
+        'setLocation' => 'l',
     ];
 
     /**
