@@ -1,6 +1,14 @@
 # Changelog
 All Notable changes to `jobs-jobs2careers` will be documented in this file
 
+## 2.0.0 - WIP
+
+### Added
+- Support for v.2 of jobs-common package
+
+### Removed
+- Old set_() methods in provider, moved to J2CQuery
+
 ## 1.1.0 - 2015-10-15
 
 ### Added
