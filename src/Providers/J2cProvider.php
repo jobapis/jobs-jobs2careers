@@ -2,7 +2,7 @@
 
 use JobApis\Jobs\Client\Job;
 
-class CareerbuilderProvider extends AbstractProvider
+class J2cProvider extends AbstractProvider
 {
     /**
      * Returns the standardized job object
