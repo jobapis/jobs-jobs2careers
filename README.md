@@ -20,12 +20,58 @@ composer require jobapis/jobs-jobs2careers
 
 ## Usage
 
-// Coming soon
+Create a Query object and add all the parameters you'd like via the constructor.
+ 
+```php
+// Add parameters to the query via the constructor
+$query = new JobApis\Jobs\Client\Queries\J2cQuery([
+    'id' => YOUR_PUBLISHER_ID,
+    'pass' => YOUR_PUBLISHER_PASSWORD,
+]);
+```
+
+Or via the "set" method. All of the parameters documented in the documentation can be added.
+
+```php
+// Add parameters via the set() method
+$query->set('q', 'engineering');
+```
+
+You can chain them if you'd like.
+
+```php
+// Add parameters via the set() method
+$query->set('l', 'Chicago, IL')
+    ->set('start', 10)
+    ->set('limit', 20);
+```
+ 
+Then inject the query object into the provider.
+
+```php
+// Instantiating an IndeedProvider with a query object
+$client = new JobApis\Jobs\Client\Provider\J2cProvider($query);
+```
+
+And call the "getJobs" method to retrieve results.
+
+```php
+// Get a Collection of Jobs
+$jobs = $client->getJobs();
+```
+
+This will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) of [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects.
 
 ## Testing
 
+To run all tests except for actual API calls
 ``` bash
 $ ./vendor/bin/phpunit
+```
+
+To run all tests including actual API calls
+``` bash
+$ ID=<YOUR PUBLISHER ID> PASS=<YOUR PUBLISHER PASSWORD> ./vendor/bin/phpunit
 ```
 
 ## Contributing
