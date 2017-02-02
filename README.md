@@ -49,8 +49,8 @@ $query->set('l', 'Chicago, IL')
 Then inject the query object into the provider.
 
 ```php
-// Instantiating an IndeedProvider with a query object
-$client = new JobApis\Jobs\Client\Provider\J2cProvider($query);
+// Instantiating the Provider with a query object
+$client = new JobApis\Jobs\Client\Providers\J2cProvider($query);
 ```
 
 And call the "getJobs" method to retrieve results.
