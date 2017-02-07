@@ -221,6 +221,6 @@ class J2cQuery extends AbstractQuery
      */
     protected function userIp()
     {
-        return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
+        return isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : getHostByName(getHostName());
     }
 }
