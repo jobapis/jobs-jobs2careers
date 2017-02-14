@@ -1,5 +1,6 @@
-# Jobs2Careers Jobs Client
+# [![JobApis.com](https://i.imgur.com/9VOAkrZ.png)](https://www.jobapis.com) Jobs2Careers Job Board API Client
 
+[![Twitter URL](https://img.shields.io/twitter/url/https/twitter.com/jobapis.svg?style=social&label=Follow%20%40jobapis)](https://twitter.com/jobapis)
 [![Latest Version](https://img.shields.io/github/release/jobapis/jobs-jobs2careers.svg?style=flat-square)](https://github.com/jobapis/jobs-jobs2careers/releases)
 [![Software License](https://img.shields.io/badge/license-APACHE%202.0-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![Build Status](https://img.shields.io/travis/jobapis/jobs-jobs2careers/master.svg?style=flat-square&1)](https://travis-ci.org/jobapis/jobs-jobs2careers)
@@ -7,8 +8,37 @@
 [![Quality Score](https://img.shields.io/scrutinizer/g/jobapis/jobs-jobs2careers.svg?style=flat-square)](https://scrutinizer-ci.com/g/jobapis/jobs-jobs2careers)
 [![Total Downloads](https://img.shields.io/packagist/dt/jobapis/jobs-jobs2careers.svg?style=flat-square)](https://packagist.org/packages/jobapis/jobs-jobs2careers)
 
-This package provides [Jobs2Careers API](http://api.jobs2careers.com/api/spec.pdf)
-support for our [Jobs Common project](https://github.com/jobapis/jobs-common).
+
+## About
+
+This package makes it easy to connect your PHP project to the [Jobs2Careers API](http://api.jobs2careers.com/api/spec.pdf). It uses the [Jobs Common project](https://github.com/jobapis/jobs-common) to standardize responses using Schema.org's [JobPosting specification](https://schema.org/JobPosting).
+
+### Example
+
+Getting jobs from the API just takes a couple lines of code:
+
+```php
+$query = new J2cQuery([
+    'id' => YOUR_PUBLISHER_ID,
+    'pass' => YOUR_PUBLISHER_PASSWORD,
+    'q' => YOUR_KEYWORD_SEARCH,
+    'l' => YOUR_LOCATION,
+]);
+$client = new J2cProvider($query);
+$jobs = $client->getJobs();
+```
+
+See [Usage](#usage) section below for more detailed examples.
+
+### Mission
+
+[JobApis](https://www.jobapis.com) makes job board and company data more accessible through open source software. To learn more, visit [JobApis.com](https://www.jobapis.com), or contact us at [admin@jobapis.com](mailto:admin@jobapis.com).
+
+
+## Requirements
+- [PHP 5.5+](http://www.php.net/)
+- [Composer](https://getcomposer.org/)
+
 
 ## Installation
 
@@ -60,31 +90,30 @@ And call the "getJobs" method to retrieve results.
 $jobs = $client->getJobs();
 ```
 
-This will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) of [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects.
+The `getJobs()` method will return a [Collection](https://github.com/jobapis/jobs-common/blob/master/src/Collection.php) of [Job](https://github.com/jobapis/jobs-common/blob/master/src/Job.php) objects based on Schema.org's [JobPosting](https://schema.org/JobPosting) specification.
 
 ## Testing
 
-To run all tests except for actual API calls
-``` bash
-$ ./vendor/bin/phpunit
-```
+1. Clone this repository from Github.
+2. Install the dependencies with Composer: `$ composer install`.
+3. Run the test suite: `$ ./vendor/bin/phpunit`.
+4. (Optional) To run all tests including actual API calls: `$ ID=<YOUR PUBLISHER ID> PASS=<YOUR PUBLISHER PASSWORD> ./vendor/bin/phpunit`
 
-To run all tests including actual API calls
-``` bash
-$ ID=<YOUR PUBLISHER ID> PASS=<YOUR PUBLISHER PASSWORD> ./vendor/bin/phpunit
-```
 
 ## Contributing
 
-Please see [CONTRIBUTING](https://github.com/jobapis/jobs-jobs2careers/blob/master/CONTRIBUTING.md) for details.
+Contributions are welcomed and encouraged! Please see [JobApis' contribution guidelines](https://www.jobapis.com/contributing/) for details, or create an issue in Github if you have any questions.
 
+## Legal
 
-## Credits
+### Disclaimer
 
-- [Karl Hughes](https://github.com/karllhughes)
-- [All Contributors](https://github.com/jobapis/jobs-jobs2careers/contributors)
+This package is not affiliated with or supported by :provider_name and we are not responsible for any use or misuse of this software.
 
+### License
 
-## License
+This package uses the Apache 2.0 license. Please see the [License File](https://www.jobapis.com/license/) for more information.
 
-The Apache 2.0. Please see [License File](https://github.com/jobapis/jobs-jobs2careers/blob/master/LICENSE) for more information.
+### Copyright
+
+Copyright 2017, Karl Hughes <khughes.me@gmail.com>.
