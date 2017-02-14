@@ -8,7 +8,7 @@
         "object",
         "jobs2careers"
     ],
-    "homepage": "https://github.com/JobBrander/jobs-jobs2careers",
+    "homepage": "https://github.com/jobapis/jobs-jobs2careers",
     "license": "Apache-2.0",
     "authors": [
         {
@@ -19,7 +19,7 @@
     ],
     "require": {
         "php": ">=5.5.0",
-        "jobbrander/jobs-common": "~1.0.3"
+        "jobapis/jobs-common": "^2.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": ">=4.6",
@@ -29,12 +29,12 @@
     },
     "autoload": {
         "psr-4": {
-            "JobBrander\\Jobs\\Client\\Providers\\": "src/"
+            "JobApis\\Jobs\\Client\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "JobBrander\\Jobs\\Client\\Providers\\Test\\": "tests/src/"
+            "JobApis\\Jobs\\Client\\Test\\": "tests/src/"
         }
     }
 }
