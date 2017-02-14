@@ -1,5 +1,5 @@
 {
-    "name": "jobbrander/jobs-jobs2careers",
+    "name": "jobapis/jobs-jobs2careers",
     "type": "library",
     "description": "Making it simple to integrate your application with the Jobs2Careers API.",
     "keywords": [
