@@ -1,7 +1,7 @@
 # Changelog
 All Notable changes to `jobs-jobs2careers` will be documented in this file
 
-## 2.0.0 - WIP
+## 2.0.0 - 2017-02-14
 
 ### Added
 - Support for v.2 of jobs-common package
